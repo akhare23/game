@@ -6,11 +6,23 @@ var laser, laser2, laserImage, laser2Image;
 
 var gameState = 0;
 
+var doorway, doorwayImage;
+
+var enemy, enemy2, enemy3, enemy4, enemyImage;
+
+var death = 0;
+
+var standImage, lastSupper,lastSupperImage;
+
 function preload(){
   playerImage = loadImage("images/bandit.png");
   bgImage = loadImage("images/thing.jpeg");
   laserImage = loadImage("images/lasers.png");
   laser2Image = loadImage("images/lasers2.png");
+  doorwayImage = loadImage("images/doorway.png");
+  enemyImage = loadImage("images/enemy.png");
+  standImage = loadImage("images/stand.png");
+  lastSupperImage = loadImage("images/lastSupper.jpeg");
 
 }
 
@@ -34,19 +46,27 @@ function setup() {
   laser2.addImage(laser2Image);
   laser2.visible = false;
 
+  doorway = createSprite(590,300,30,30);
+  doorway.addImage(doorwayImage);
+  doorway.scale = 0.1;
+  doorway.visible = false;
   
-
   topEdge = createSprite(300,2,600,5);
   topEdge.visible = false;
   bottomEdge = createSprite(300,598,600,5);
   bottomEdge.visible = false;
+  rightEdge = createSprite(598,300,5,600);
+  rightEdge.visible = true;
+  leftEdge = createSprite(2,300,5,600);
   
 }
 
 function draw() {
   background(0);
+  
   if(gameState === 0){
     player.visible = false;
+    textSize(12);
     stroke("blue");
     fill("blue");
     text("HELLO!", 275,300);
@@ -60,6 +80,7 @@ function draw() {
       gameState = 1;
       player.visible = true;
       bg.visible = true;
+      doorway.visible = true;
       player.x = 50;
       player.y = 200;
       laser.visible = true;
@@ -70,6 +91,109 @@ function draw() {
   }
 
   if(gameState === 1){
+  
+
+  if(player.isTouching(laser) || player.isTouching(laser2)){
+    player.x = 50;
+    player.y = 200;
+    death++;
+  }
+
+  if(player.isTouching(doorway)){
+    gameState = 2;
+    player.x = 50;
+    player.y = 500;
+    laser.destroy();
+    laser2.destroy();
+    enemy = createSprite(300,300,20,20);
+    enemy.addImage(enemyImage);
+    enemy.velocityX=10;
+
+    enemy2 = createSprite(300,300,20,20);
+    enemy2.addImage(enemyImage);
+    enemy2.velocityY = 10;
+
+    enemy3 = createSprite(300,300,20,20);
+    enemy3.addImage(enemyImage);
+    enemy3.velocityX = 10;
+    enemy3.velocityY = -10;
+
+    enemy4 = createSprite(300,300,20,20);
+    enemy4.addImage(enemyImage);
+    enemy4.velocityX = -10;
+    enemy4.velocityY = 10;
+
+    enemy5 = createSprite(300,300,20,20);
+    enemy5.addImage(enemyImage);
+    enemy5.velocityX = -10;
+    enemy5.velocityY = -10;
+
+    enemy6 = createSprite(300,300,20,20);
+    enemy6.addImage(enemyImage);
+    enemy6.velocityX = 10;
+    enemy6.velocityY = 10;
+
+    enemy7 = createSprite(300,300,20,20);
+    enemy7.addImage(enemyImage);
+    enemy7.velocityX=-10;
+
+    enemy8 = createSprite(300,300,20,20);
+    enemy8.addImage(enemyImage);
+    enemy8.velocityY=-10;
+
+    doorway.x = 300;
+    doorway.y = 10;
+   }
+  }
+  if(gameState === 2){
+    enemy8.bounceOff(topEdge);
+    enemy8.bounceOff(bottomEdge);
+    enemy7.bounceOff(leftEdge);
+    enemy7.bounceOff(rightEdge);
+    enemy5.bounceOff(topEdge);
+    enemy5.bounceOff(bottomEdge);
+    enemy5.bounceOff(rightEdge);
+    enemy5.bounceOff(leftEdge);
+    enemy6.bounceOff(topEdge);
+    enemy6.bounceOff(bottomEdge);
+    enemy6.bounceOff(rightEdge);
+    enemy6.bounceOff(leftEdge);
+    enemy4.bounceOff(topEdge);
+    enemy4.bounceOff(bottomEdge);
+    enemy4.bounceOff(rightEdge);
+    enemy4.bounceOff(leftEdge);
+    enemy3.bounceOff(topEdge);
+    enemy3.bounceOff(bottomEdge);
+    enemy3.bounceOff(rightEdge);
+    enemy3.bounceOff(leftEdge);
+    enemy2.bounceOff(topEdge);
+    enemy2.bounceOff(bottomEdge);
+    enemy.bounceOff(leftEdge);
+    enemy.bounceOff(rightEdge);
+    
+    if(player.isTouching(enemy) || player.isTouching(enemy2) || player.isTouching(enemy3) || player.isTouching(enemy4)|| player.isTouching(enemy5) || player.isTouching(enemy6) || player.isTouching(enemy7) || player.isTouching(enemy8)){
+      player.x = 20;
+      player.y = 450;
+      death++;
+    }
+
+    if(player.isTouching(doorway)){
+      gameState = 3;
+      player.x = 20;
+      player.y = 450;
+
+      stand = createSprite(30,40,20,20);
+      stand.addImage(standImage);
+      stand.scale = 0.2;
+
+      lastSupper = createSprite(30,40,20,20);
+      lastSupper.addImage(lastSupperImage);
+      lastSupper.scale = 0.1;
+     }
+  }
+
+  
+  
   if(keyDown(UP_ARROW)){
     player.y = player.y-5;
   }
@@ -82,20 +206,18 @@ function draw() {
   if(keyDown(RIGHT_ARROW)){
     player.x = player.x+5;
   }
-
-  if(player.isTouching(laser) || player.isTouching(laser2)){
-    player.x = 50;
-    player.y = 200;
-  }
-  }
-  
   
   laser.bounceOff(topEdge);
   laser.bounceOff(bottomEdge);
   laser2.bounceOff(topEdge);
   laser2.bounceOff(bottomEdge);
+ 
   
   drawSprites();
+
+  textSize(20);
+  stroke("blue");
+  text("death count:" + death, 450,20)
 }
 
 
