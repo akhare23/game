@@ -2,7 +2,7 @@ var player, playerImage;
 
 var bg, bgImage;
 
-var laser, laser2, laserImage, laser2Image;
+var laser, laser2, laser3, laser4, laserImage, laser2Image;
 
 var gameState = 0;
 
@@ -12,7 +12,10 @@ var enemy, enemy2, enemy3, enemy4, enemyImage;
 
 var death = 0;
 
-var standImage, lastSupper,lastSupperImage;
+var standImage, lastSupper,lastSupperImage, starryNight, starryNightImage;
+
+var key, key2, keyImage;
+
 
 function preload(){
   playerImage = loadImage("images/bandit.png");
@@ -23,6 +26,8 @@ function preload(){
   enemyImage = loadImage("images/enemy.png");
   standImage = loadImage("images/stand.png");
   lastSupperImage = loadImage("images/lastSupper.jpeg");
+  starryNightImage= loadImage("images/starrynight.jpg");
+  keyImage = loadImage("images/key.png");
 
 }
 
@@ -182,13 +187,32 @@ function draw() {
       player.x = 20;
       player.y = 450;
 
-      stand = createSprite(30,40,20,20);
+      stand = createSprite(40,40,20,20);
       stand.addImage(standImage);
       stand.scale = 0.2;
 
-      lastSupper = createSprite(30,40,20,20);
+      lastSupper = createSprite(40,40,20,20);
       lastSupper.addImage(lastSupperImage);
-      lastSupper.scale = 0.1;
+      lastSupper.scale = 0.3;
+
+      stand2 = createSprite(560,40,20,20);
+      stand2.addImage(standImage);
+      stand2.scale = 0.2;
+
+      starryNight = createSprite(560,30,20,20);
+      starryNight.addImage(starryNightImage);
+      starryNight.scale = 0.05;
+
+      laser3 = createSprite(300,300,600,20);
+      laser3.shapeColor = "red";
+
+      laser4 = createSprite(500,300,20,600);
+      laser4.shapeColor = "red";
+      laser4.velocityX = -5;
+
+      key = createSprite(20,330,20,20);
+      key.addImage(keyImage);
+      key.scale = 0.5;
      }
   }
 
