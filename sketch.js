@@ -2,7 +2,7 @@ var player, playerImage;
 
 var bg, bgImage;
 
-var laser, laser2, laser3, laser4, laserImage, laser2Image;
+var laser, laser2, laser3, laser4, laserImage, laser2Image, lasers, lasers2, lasersGroup;
 
 var gameState = 0;
 
@@ -14,7 +14,9 @@ var death = 0;
 
 var standImage, lastSupper,lastSupperImage, starryNight, starryNightImage;
 
-var key, key2, keyImage;
+var key1, keyImage;
+
+var monalisa, monalisaImage;
 
 
 function preload(){
@@ -28,6 +30,7 @@ function preload(){
   lastSupperImage = loadImage("images/lastSupper.jpeg");
   starryNightImage= loadImage("images/starrynight.jpg");
   keyImage = loadImage("images/key.png");
+  monalisaImage = loadImage("images/monalisa.jpg");
 
 }
 
@@ -64,6 +67,7 @@ function setup() {
   rightEdge.visible = true;
   leftEdge = createSprite(2,300,5,600);
   
+  lasersGroup = createGroup();
 }
 
 function draw() {
@@ -187,6 +191,14 @@ function draw() {
       player.x = 20;
       player.y = 450;
 
+      key1 = createSprite(30,330,20,20);
+      key1.addImage(keyImage);
+      key1.scale = 0.5;
+
+      key2 = createSprite(550,330,20,20);
+      key2.addImage(keyImage);
+      key2.scale = 0.5;
+
       stand = createSprite(40,40,20,20);
       stand.addImage(standImage);
       stand.scale = 0.2;
@@ -210,11 +222,68 @@ function draw() {
       laser4.shapeColor = "red";
       laser4.velocityX = -5;
 
-      key = createSprite(20,330,20,20);
-      key.addImage(keyImage);
-      key.scale = 0.5;
+     
      }
   }
+    if(gameState === 3){
+      console.log(key1.x);
+      if(player.isTouching(laser3) || player.isTouching(laser4)){
+      death++
+      player.x = 20;
+      player.y = 450;
+      laser4.x = 300;
+      laser4.y = 300;
+    }
+    if(player.isTouching(key1)){
+      laser4.destroy();
+      key1.destroy();
+    }
+
+    if(player.isTouching(key2)){
+      laser3.destroy();
+      key2.destroy();
+    }
+    if(player.isTouching(doorway)){
+      gameState = 4;
+      console.log(gameState);
+      stand.destroy();
+      stand2.destroy();
+      starryNight.destroy();
+      lastSupper.destroy();
+      player.x =  50;
+      player.y = 460;
+    }
+  }
+  if(gameState === 4){
+    spawnLasers();
+    if(player.isTouching(lasersGroup)){
+      player.x = 50;
+      player.y = 460;
+      death ++;
+    }
+    if(player.isTouching(doorway)){
+      gameState = 5;
+      doorway.destroy();
+      player.x = 300;
+      player.y = 500;
+
+      stand3 = createSprite(300,200,20,20);
+      stand3.addImage(standImage);
+      stand3.scale = 0.3;
+
+      monalisa = createSprite(300,200,20,20);
+      monalisa.addImage(monalisaImage);
+      monalisa.scale = 0.1;
+    }
+  }
+  if(gameState === 5){
+    if(player.isTouching(monalisa)){
+      gameState = 6;
+      monalisa.destroy();
+      stand3.destroy();
+     }
+  }
+ 
 
   
   
@@ -239,9 +308,34 @@ function draw() {
   
   drawSprites();
 
+  if(gameState === 6){
+    background(0);
+    fill("blue");
+    stroke("blue");
+    text("AMAZING JOB!! You completed the game!!",150,200);
+  }
+  
   textSize(20);
   stroke("blue");
+  fill("blue");
   text("death count:" + death, 450,20)
+}
+
+function spawnLasers(){
+  if(frameCount%40===0){
+    for(var i = 0; i<601; i = i + 100){
+      lasers = createSprite(i,300,20,600);
+      lasers2 = createSprite(300,i,600,20);
+      lasers.shapeColor = "red";
+      lasers2.shapeColor = "red";
+      lasers.lifetime = 20;
+      lasers2.lifetime = 20;
+      lasersGroup.add(lasers);
+     lasersGroup.add(lasers2);
+    }
+    
+  }
+  
 }
 
 
